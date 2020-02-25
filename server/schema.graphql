@@ -17,7 +17,7 @@ type Product {
 
 #Input function
 input ProductInputs {
-    Category: CategoryType
+    Category: CategoryType=Shirts
     Name: String!
     Price: Float
     Image: String  
@@ -25,11 +25,9 @@ input ProductInputs {
 
 
 type Query {
-    # about: String!
     productList: [Product!]!
 }
 
 type Mutation {
-    # setProduct(product: Product!): Product
     productAdd(product: ProductInputs!): Product!
 }

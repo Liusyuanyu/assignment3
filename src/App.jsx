@@ -7,22 +7,6 @@ class InventorySubhead extends React.Component {
     }
 }
 
-// const initialProducts = [
-//     {
-//         id: 1, name: 'Blue Shirt',price: '16.99', 
-//         category: 'Shirts', image_url: 'https://images.app.goo.gl/A1VVdgNYDBFprrow5',
-//     },
-//     {
-//         id: 2, name: 'Logo Hat',price: '12.99',
-//         category: 'Accessories', image_url: 'https://images.app.goo.gl/bBjLavbRvs7DJtpu8',
-//     },
-//     {
-//         id: 3, name: 'Regular Fit Jeans',price: '34.99',
-//         category: 'Jeans', image_url: 'https://images.app.goo.gl/ALG2aDEKpPxGV9137',
-//     },
-//   ];
-
-
 function ProductRow(props) {
     const product = props.product;
     return (
@@ -66,11 +50,11 @@ class ProductAdd extends React.Component {
   handleSubmit(e) {
     e.preventDefault();
     const form = document.forms.productAdd;
-    var price = form.priceper.value;
-    price = price.replace('$','');
+    var pricedollar = form.priceper.value;
+    var price =pricedollar.replace('$','');
     const product = {
-      name: form.name.value, category: form.category.value,
-      price: price, image_url: form.image_url.value
+      Name: form.name.value, Category: form.category.value,
+      Price: price, Image: form.image_url.value
     };
     this.props.createProduct(product);
     form.reset();
@@ -113,23 +97,13 @@ class ProductAdd extends React.Component {
   }
 }
 
-
-
-const dateRegex = new RegExp('^\\d\\d\\d\\d-\\d\\d-\\d\\d');
-
-function jsonDateReviver(key, value) {
-  if (dateRegex.test(value)) return new Date(value);
-  return value;
-}
-
 async function graphQLFetch(query, variables = {}) {
   const response = await fetch('/graphql', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json'},
     body: JSON.stringify({ query, variables })
   });
-  const body = await response.text();
-  const result = JSON.parse(body, jsonDateReviver);
+  const result = await response.json();
   return result.data;
 }
 
@@ -140,12 +114,9 @@ class MyProductList extends  React.Component{
     this.createProduct = this.createProduct.bind(this);
   }
 
-  componentDidMount() {
-    this.loadData();
-    // alert("After loadData");
-    // alert(products[0]);
-    // alert(this.state.products);
-  }
+  // componentDidMount() {
+  //   this.loadData();
+  // }
   async loadData() {
     const query = `query {
       productList {
@@ -154,7 +125,6 @@ class MyProductList extends  React.Component{
     }`;
     const data = await graphQLFetch(query);
     this.setState({ products: data.productList });
-    // alert(data.productlist);
   }
 
   async createProduct(product) {
@@ -164,20 +134,7 @@ class MyProductList extends  React.Component{
       }
     }`;
     const data = await graphQLFetch(query, { product });
-    
-    query = `query {
-      productList {
-        id Name Price Category Image
-      }
-    }`;
-    data = await graphQLFetch(query);
-
-    this.setState({ products: data.productlist });
-
-    // product.id = this.state.products.length + 1;
-    // const newProductList = this.state.products.slice();
-    // newProductList.push(product);
-    // this.setState({ products: newProductList });
+    this.loadData();
   }
   
   render(){

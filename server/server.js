@@ -35,7 +35,6 @@ const resolvers = {
   },
 };
 
-
 const fs = require('fs');
 const { ApolloServer} = require('apollo-server-express');
 const express = require('express');

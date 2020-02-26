@@ -106,12 +106,9 @@ class MyProductList extends React.Component {
       products: []
     };
     this.createProduct = this.createProduct.bind(this);
-  } // componentDidMount() {
-  //   this.loadData();
-  // }
+  }
 
-
-  async loadData() {
+  async retrieveData() {
     const query = `query {
       productList {
         id Name Price Category Image
@@ -132,7 +129,7 @@ class MyProductList extends React.Component {
     const data = await graphQLFetch(query, {
       product
     });
-    this.loadData();
+    this.retrieveData();
   }
 
   render() {
